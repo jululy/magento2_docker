@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+docker-compose exec php-fpm  chown -Rf www-data:www-data /var/www
+docker-compose exec php-fpm  chmod 4755 /bin/busybox
+docker-compose exec -u www-data php-fpm /usr/local/bin/php  /var/www/html/bin/magento cron:install
+docker-compose exec -u www-data php-fpm  /usr/local/bin/php  /var/www/html/update/cron.php
+docker-compose exec php-fpm  crond -b
+#docker-compose exec  redis-server echo 'vm.overcommit_memory = 1' >> /etc/sysctl.conf
+#docker-compose exec  redis-server echo 511 >> /proc/sys/net/core/somaxconn
