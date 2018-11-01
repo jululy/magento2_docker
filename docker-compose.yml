@@ -3,34 +3,22 @@ services:
   nginx:
     image: nginx:stable-alpine
     ports:
-      - "8181:80"
+      - "80:80"
+    privileged: true
     volumes:
       - "./src:/var/www/html"
       - "./web_config:/etc/nginx/conf.d/"
     depends_on:
       - php-fpm
   php-fpm:
-    image: liangz87/magetnto:phpfpm
+    build: ./
     ports:
       - "9000"
     privileged: true
     volumes:
       - "./src:/var/www/html"
-      - "./php_config:/usr/local/etc/php/conf.d"
     depends_on:
-      - db-server   
       - redis-server
-  db-server:
-    image: mysql:5.7
-    ports:
-      - "3306:3306"
-    environment:
-      - MYSQL_ROOT_PASSWORD=test
-      - MYSQL_DATABASE=magento
-      - MYSQL_USER=test
-      - MYSQL_PASSWORD=test
-    volumes:
-      - ./dbdata:/var/lib/mysql
   redis-server:
     image: redis:alpine
     ports:
